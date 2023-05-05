@@ -3,6 +3,7 @@ package com.example.restclientwebshop;
 import com.example.restclientwebshop.ShopObjects.Category;
 import com.example.restclientwebshop.ShopObjects.Product;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -58,6 +59,28 @@ public class RestClient {
                 .uri("delete/"+id)
                 .retrieve()
                 .bodyToMono(String.class);
+        return mono.block();
+    }
+
+    public String newProduct(Product product) {
+        Mono<String> mono = client
+                .post()
+                .uri("addProduct")
+                .bodyValue(product)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(String.class);
+
+        return mono.block();
+    }
+
+    public String addInventory(int id, int amount) {
+        Mono<String> mono = client
+                .put()
+                .uri("updateInventory/{id}/{amount}",id,amount)
+                .retrieve()
+                .bodyToMono(String.class);
+
         return mono.block();
     }
 }
